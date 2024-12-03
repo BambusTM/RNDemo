@@ -17,7 +17,6 @@ const TodoScreen: React.FC<TodoScreenProps> = () => {
     const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
-        // Load todos from AsyncStorage when the screen loads
         const loadTodos = async () => {
             try {
                 const storedTodos = await AsyncStorage.getItem('todos');
@@ -32,7 +31,6 @@ const TodoScreen: React.FC<TodoScreenProps> = () => {
     }, []);
 
     useEffect(() => {
-        // Save todos to AsyncStorage whenever the todos list changes
         const saveTodos = async () => {
             try {
                 await AsyncStorage.setItem('todos', JSON.stringify(todos));
@@ -63,6 +61,10 @@ const TodoScreen: React.FC<TodoScreenProps> = () => {
         );
     };
 
+    const deleteTodo = (id: string) => {
+        setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Todo List</Text>
@@ -79,8 +81,8 @@ const TodoScreen: React.FC<TodoScreenProps> = () => {
                 data={todos}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => toggleCompletion(item.id)}>
-                        <View style={styles.todoItem}>
+                    <View style={styles.todoItem}>
+                        <TouchableOpacity onPress={() => toggleCompletion(item.id)}>
                             <Text
                                 style={[
                                     styles.todoText,
@@ -89,8 +91,9 @@ const TodoScreen: React.FC<TodoScreenProps> = () => {
                             >
                                 {item.text}
                             </Text>
-                        </View>
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                        <Button title="Delete" onPress={() => deleteTodo(item.id)} />
+                    </View>
                 )}
             />
         </View>
@@ -125,6 +128,9 @@ const styles = StyleSheet.create({
         padding: 15,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     todoText: {
         fontSize: 18,

@@ -10,7 +10,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         <>
             <Button
                 title="Go to Profile Page"
-                onPress={() => navigation.navigate('Profile', { name: 'Jane' })}
+                onPress={() => navigation.navigate('Profile', { name: 'Björn' })}
             />
             <Button
                 title="Todo Page"
